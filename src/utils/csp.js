@@ -18,6 +18,9 @@ const DEFAULT_CONNECT_DOMAINS = [
   'https://api.vore.top'
 ];
 
+// 允许通过 iframe 嵌入本站的父页面来源（CSP frame-ancestors）
+const FRAME_ANCESTORS = ["'self'", 'https://sounfury.top', 'https://*.sounfury.top'];
+
 const CSP_META_TAG_RE_GLOBAL = /<meta\b(?=[^>]*http-equiv=["']Content-Security-Policy["'])[^>]*>\s*/gi;
 
 export function stripCspMeta(html) {
@@ -73,7 +76,7 @@ export function buildCspHeader({ staticDomains = [], apiDomains = [] } = {}) {
     buildDirective('font-src', ["'self'", TURNSTILE_DOMAIN, FONTS_STATIC_DOMAIN, ...staticDomains]),
     buildDirective('connect-src', ["'self'", TURNSTILE_DOMAIN, INSIGHTS_DOMAIN, RAW_GITHUB_DOMAIN, ...DEFAULT_CONNECT_DOMAINS, ...apiDomains]),
     buildDirective('frame-src', [TURNSTILE_DOMAIN]),
-    buildDirective('frame-ancestors', ["'none'"]),
+    buildDirective('frame-ancestors', FRAME_ANCESTORS),
     buildDirective('form-action', ["'self'"]),
     buildDirective('object-src', ["'none'"]),
     buildDirective('base-uri', ["'self'"])
